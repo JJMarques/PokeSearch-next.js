@@ -1,9 +1,17 @@
+import { useRouter } from 'next/router'
+
 export default function IdPokemon({ data }) {
+    const router = useRouter()
     console.log(data);
+
+    if (router.isFallback) {
+        return <div>Loading...</div>
+    }
+
     return(
         <div>
             {data.name}
-            {data.id}
+            {data.id} 
         </div>
     )
 }
@@ -13,14 +21,11 @@ export async function getStaticPaths() {
     const json = await res.json()
     const data = json
 
-    let paths = []
-    for (let i = 1; i < data.count; i++) {
-        paths[i] = { params: { id: i.toString() }}
-    }
-
     return {
-        paths,
-        fallback: false
+        paths: [
+            {params: { id: "1" }}
+        ],
+        fallback: true
     }
 }
 
